@@ -39,4 +39,4 @@ vignettes/*.pdf
 .Renviron
 
 # Remove HTML extensions
-.html
+*.html
