@@ -301,19 +301,34 @@ foo <- function(
   mean_age
 ) {
   
+  
+  #' function logic;
+  #' 
+  #' @param age a numeric vector of length 1, to be evaluated
+  #' @param person a numeric vector of length 1, which indicates
+  #' the person numnber.
+  #' @param mean_age a numeric vector of length 1 containing
+  #' the mean average of all the persons you are evaluating.
+  
   if (age > mean_age) {
     
-      paste(
+      string <- paste(
         'Person', person, 'IS older than average'
       )
     
   } else {
     
-      paste(
+      string <- paste(
         'Person', person, 'is NOT older than average'
       )
     
   }
+  
+  
+  return(
+    string
+  )
+  
 }
 
 # 3) Create a for loop using lapply
@@ -332,5 +347,125 @@ lapply(
 )
 ```
 
-Using `loops` and `functions` we saved roughly 70 lines of code, which in a bigger `project` corresponds to over 1000 lines of code if done correctly.
+Using `loops` and `functions` we saved roughly 70 lines of code, which in a bigger `project` corresponds to over 1000s lines of code if done correctly.
 
+
+### Functions
+
+When creating custom `functions` you should recognize that there is three elements.
+
+1. `arguments` and `inputs`
+2. `function` `logic`
+3. `output`
+
+In most cases your function has a main `ìnput`, which is an `expression` of some form. Mostly a `data.frame`. Along with the main `input` there is a set of auxillary `arguments` that are necessary given the problem you are trying to solve.
+
+Given the `arguments` and goal - your `function` has to contain `code` which solves the problem at hand. And then, finally, the `function` should `return` the desired `output`.  In its most generic form, a `function` with N arguments is created like below,
+
+```{r}
+# 1) Create a generic function
+# and call it foo. 
+foo <- function(
+    main_input,
+    argument1,
+    argument2,
+    argument3,
+    argumentN
+) {
+  
+  #' function logic;
+  #' 
+  #' @param main_input an object that needs to
+  #' be processen
+  #' 
+  #' @param argument1 an auxillary object
+  #' that is needed for the function
+  #' @param argument2 an auxillary object
+  #' that is needed for the function 
+  #' @param argument3 an auxillary object
+  #' that is needed for the function 
+  #' @param argumentN an auxillary object
+  #' that is needed for the function 
+  
+  string <- paste(
+    'My custom function!'
+  )
+  
+  
+  # Return statement
+  # with the output you wish
+  # the function returns.
+  # This could also be a list, data.frame or anything
+  # you want.
+  return(
+    string
+  )
+  
+}
+```
+
+
+### For loops
+
+You have already seen the `for loop` above, in this section we go through each element of a `for loop` using a traditional `for loop` and `lapply`. In both cases we need an `iterator` to loop through, and an object we need to evaluate.
+
+```{r}
+# Using a regular for loop
+
+# 1) Create a numeric vector
+# that we can iterate through
+numeric_vector <- c(1,2,3,4,5)
+
+
+# 2) Create the for loop;
+for (i in 1:length(numeric_vector)) {
+  
+  # NOTE: i is the iterator, the 1:lenght( c(1,2,3,4,5)) is what we iterate on
+  # so it goes from i = 1, i = 2, .... i = 5
+  
+  # Let us test if the number in the vector
+  # is greater than 2.
+  number <- numeric_vector[i] > 2
+  
+  print(
+    paste(
+      'The number', numeric_vector[i], 'is greater than 2'
+    )
+  )
+  
+  
+}
+```
+
+Alternatively we can use `lapply` to acheive the same thing.
+
+```{r}
+# Using a regular for loop
+
+# 1) Create a numeric vector
+# that we can iterate through
+numeric_vector <- c(1,2,3,4,5)
+
+
+# 2) Create the for loop;
+lapply(
+  X = 1:length(numeric_vector),
+  FUN = function(i) {
+    
+  # NOTE: i is the iterator, the 1:lenght( c(1,2,3,4,5)) is what we iterate on
+  # so it goes from i = 1, i = 2, .... i = 5
+  
+  # Let us test if the number in the vector
+  # is greater than 2.
+  number <- numeric_vector[i] > 2
+  
+  paste(
+      'The number', numeric_vector[i], 'is greater than 2'
+    )
+    
+  }
+)
+```
+
+
+In both cases we a have an `iterator` which we called `i`, and range that we iterate on `1:length(numeric_vector)` so we start from 1 and continue to 5.
