@@ -40,3 +40,5 @@ vignettes/*.pdf
 
 # Remove HTML extensions
 *.html
+
+input

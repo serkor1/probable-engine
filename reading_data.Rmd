@@ -1,0 +1,160 @@
+---
+title: "Reading Data in R"
+subtitle: "The basics"
+author: "Serkan Korkmaz"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    theme: lumen
+    toc_float: true
+---
+
+# Introduction
+
+Reading `data` in `R` is the most essential part of the course. The `data` that we wil encounter is most commonly given in `csv`, `txt` or `xlsx` format. In this vignette we will discuss how to load the `data` correctly in `R`
+
+Before we continue with the vignette, we need to have the correct `libraries` installed. So if you haven't already installed `data.table` and `readOD`, please run the following code
+
+```{r, eval = FALSE}
+# install packages
+install.packages('readODS', dependencies = TRUE)
+install.packages('data.table', dependencies = TRUE)
+```
+
+
+## Creating data
+
+For the purpose of this vignette we will write some data to our project folder, in the specified formats above.
+
+```{r}
+# write data
+
+# 1) CSV files
+
+# 1.1) With semi-colon seperated
+# values
+data.table::fwrite(
+  mtcars,
+  file = 'input/mtcars_semicolon.csv',
+  sep = ';'
+)
+
+# 1.2) Comma seperated
+# values
+data.table::fwrite(
+  mtcars,
+  file = 'input/mtcars_comma.csv'
+)
+
+# 2) Text files
+# with empty spaces
+data.table::fwrite(
+  mtcars,
+  file = 'input/mtcars.txt',
+  sep = '\t'
+)
+
+# 3) Excel files
+readODS::write_ods(
+  mtcars,
+  path = 'input/mtcars.xlsx'
+)
+```
+
+
+## Reading data in R
+
+To `read` the `data` in `R` we first need to follow the following algorithm,
+
+1. Determine the `data format`; the extension, ie. `.csv`
+2. Determine the `seperator`; the values which seperates the colums
+3. Check if the data is loaded correctly
+
+### Reading CSV files
+
+```{r}
+# 1) Read csv file
+# with comma seperated values
+mtcars_comma <- data.table::fread(
+  'input/mtcars_comma.csv',
+  sep = ","
+)
+
+# 2) Check if the data has been
+# read correctly by using head
+head(mtcars_comma)
+```
+
+The `data` looks correct. Lets try to `read` the comma seperated `data` with a semicolon seperator and see how `R` reacts,
+
+```{r}
+# 1) Read csv file
+# with comma seperated values using
+# the wrong seperator
+mtcars_wrong <- data.table::fread(
+  'input/mtcars_comma.csv',
+  sep = ";"
+)
+
+# 2) Check if the data has been
+# read correctly by using head
+head(mtcars_wrong)
+```
+
+As you can see, `reading` data with the wrong separator loads all values of the data in a single column. Therefore you should always check if the `data` is read correctly.
+
+> When using `fread` from the `data.table` library you do not have to worry about seperators, as this function automatically detects the seperator
+
+```{r}
+# 1) Read csv file
+# with comma seperated values without
+# specifying a seperator
+mtcars_generic <- data.table::fread(
+  'input/mtcars_comma.csv'
+)
+
+# 2) Check if the data has been
+# read correctly by using head
+head(mtcars_generic)
+```
+
+The `data` looks neat and tidy and is ready for futher analysis.
+
+### Reading TXT files
+
+Sometimes `data` is delivered as `.txt`, which can also be comma or semicolon seperated. But more often than not it is seperated by tabs, ie. fixed length empty space. To `read` `data` with tabular space we use `\t` as seperator.
+
+```{r}
+# 1) Read txt file
+# with tab seperated values 
+mtcars_generic <- data.table::fread(
+  'input/mtcars.txt',
+  sep = '\t'
+)
+
+# 2) Check if the data has been
+# read correctly by using head
+head(mtcars_generic)
+```
+
+
+
+### Reading Excel files
+
+In rare cases you will encounter Excel files. These are a bit tricky to `read` as the `data` can be stored in different sheets. If the data is stored in the first sheet, then the `data` is easily `read` in the following way,
+
+```{r}
+# 1) Read Excel file
+mtcars_excel <- readODS::read_ods(
+  'input/mtcars.xlsx'
+)
+
+# 2) Check if the data has been
+# read correctly by using head
+head(mtcars_excel)
+```
+
+# NOTE
+
+When you `read` data ***make sure*** that you are writing the extensions correctly. This means that if the `data` is stored as `data.xls` you `read` it as `data.xls`, not `data.xlsx`.
